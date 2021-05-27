@@ -5,6 +5,7 @@ public class Deplacement : MonoBehaviour
 {
     public float moveSpeed;
     public float jumpForce;
+    private float horizontalMovement;
 
     public bool isJumping;
     public bool isGrounded;
@@ -15,16 +16,19 @@ public class Deplacement : MonoBehaviour
     public Rigidbody2D rb;
     private Vector3 velocity = Vector3.zero;
     
-     void FixedUpdate()
-    {
-        isGrounded = Physics2D.OverlapArea(groundCheckLeft.position, groundCheckRight.position);
-
-        float horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-
+    void Update()
+    {         
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             isJumping = true;
         }
+    }
+    
+    void FixedUpdate()
+    {
+        isGrounded = Physics2D.OverlapArea(groundCheckLeft.position, groundCheckRight.position);
+
+        horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
 
         MovePlayer(horizontalMovement);
     }
