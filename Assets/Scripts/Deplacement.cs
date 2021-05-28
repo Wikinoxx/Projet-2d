@@ -12,10 +12,17 @@ public class Deplacement : MonoBehaviour
 
     public Transform groundCheckLeft;
     public Transform groundCheckRight;
+    public Transform groundCheckTop;
+    public Transform groundCheckBottom;
+    public Transform groundCheckTop2;
+    public Transform groundCheckBottom2;
 
     public Rigidbody2D rb;
     private Vector3 velocity = Vector3.zero;
-    
+
+    public Animator animator;
+    public SpriteRenderer spriteRenderer;
+
     void Update()
     {         
         if (Input.GetButtonDown("Jump") && isGrounded)
@@ -28,9 +35,18 @@ public class Deplacement : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapArea(groundCheckLeft.position, groundCheckRight.position);
 
+        isGrounded = Physics2D.OverlapArea(groundCheckTop.position, groundCheckBottom.position);
+
+        isGrounded = Physics2D.OverlapArea(groundCheckTop2.position, groundCheckBottom2.position);
+
         horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
 
         MovePlayer(horizontalMovement);
+
+        Flip(rb.velocity.x);
+
+        float characterVelocity = Mathf.Abs(rb.velocity.x);
+        animator.SetFloat("Speed", characterVelocity);
     }
 
     void MovePlayer(float _horizontalMovement)
@@ -42,6 +58,18 @@ public class Deplacement : MonoBehaviour
         {
             rb.AddForce(new Vector2(0f, jumpForce));
             isJumping = false;
+        }
+    }
+
+    void Flip(float _velocity)
+    {
+        if (_velocity > 0.1f)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (_velocity < -0.1f)
+        {
+            spriteRenderer.flipX = true;
         }
     }
 }
